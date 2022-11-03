@@ -1,5 +1,7 @@
 import plotly.express as px
 from cnextlib.udf import register_udf, Config, View, OutputType, Position, Shape, Location, View, clear_udfs
+import plotly.io as pio
+pio.renderers.default = "jupyterlab"
 MAX_POINT_COUNT = 1000
 
 
