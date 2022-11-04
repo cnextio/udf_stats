@@ -71,3 +71,38 @@ def violin_plot(df, col_name):
     else:
         return None
     print('Done')
+    
+@register_udf("density", OutputType.IMAGE,
+                     {Location.TABLE_HEADER: View(Position(1, 0)),
+                      Location.SUMMARY: View(Position(0, 1))})
+def density(df, col_name):
+    print('Get %s for column %s... ' %
+          (inspect.stack()[0][3], col_name), end='')
+    if df[col_name].dtypes not in ["object"]:
+        plt.figure(figsize=(8, 4))
+        sns.kdeplot(df[col_name], color="#3283FE")
+        plt.xlabel("")
+        plt.ylabel("")
+        plt.show()
+    else:
+        fig = sns.barplot(df[col_name].value_counts()[:])
+    print('Done')
+
+@register_udf("density histogram", OutputType.IMAGE,
+                     {Location.TABLE_HEADER: View(Position(1, 0)),
+                      Location.SUMMARY: View(Position(0, 1))})
+def density_histogram(df, col_name):
+    print('Get %s for column %s... ' %
+          (inspect.stack()[0][3], col_name), end='')
+    if df[col_name].dtypes not in ["object"]:
+        plt.figure(figsize=(8, 4))
+        sns.distplot(df[col_name], hist=True, kde=True, 
+             bins=int(180/5), color="#3283FE", hist_kws={'edgecolor':'black'},
+             kde_kws={'linewidth': 10})
+        plt.xlabel("")
+        plt.ylabel("")
+        plt.show()
+    else:
+        fig = sns.barplot(df[col_name].value_counts()[:])
+    print('Done')
+
